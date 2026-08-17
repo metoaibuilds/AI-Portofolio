@@ -1,56 +1,72 @@
-# Ni Asap Financial Dashboard — Requirements v1.0
-**Owner:** Metodius · **Date:** July 2026 · **Status:** Approved for build
+# Tokyosnap Studio Financial Dashboard — Requirements v1.0
+**Owner:** Metodius · **Business:** Tokyosnap Studio (self-photo studio) · **Date:** July 2026
 
 ## 1. Problem
-Ni Asap (restaurant, Nias Island) tracks money via staff reports typed into
-Excel. Daily cash is deposited into the owner's personal account, mixed with
-QRIS and bank-transfer income. Consequences:
-- No real-time view of profit or margin
-- Business and personal money are mixed (audit/tax risk)
-- No visibility into waste vs sell-out; production planning is guesswork
-- Anomalies (missing cash, cost spikes) are found late or never
+Orders come via WhatsApp Business; the operator manually re-enters each
+order into a Google Sheet after payment. A WhatsApp → Sheets automation
+was attempted but is unreliable, so entry remains manual. Consequences:
+- No real-time visibility into revenue vs. the IDR 4,000,000/month net
+  income target
+- No breakdown by package or add-on — cannot tell which offerings drive
+  profit or which are underperforming
+- No structured cost tracking against the target
 
 ## 2. Users
-- **Owner** (remote, Australia/anywhere): full view, alerts, monthly reports
-- **Manager** (on-site, Nias): daily data entry, daily view
-- Language: UI and AI outputs in Bahasa Indonesia; English toggle
+- **Owner** (Metodius, remote): full financial view, target tracking, alerts
+- **Operator** (on-site): daily order entry
+- Language: Bahasa Indonesia primary, English toggle
 
-## 3. Data Inputs (entered daily/monthly by manager)
-| Input | Frequency | Detail |
+## 3. Pricing Reference (locked into a lookup table, not re-typed per order)
+| Package | Price (IDR) | Duration |
 |---|---|---|
-| Sales income | Daily | Split by payment method: cash / QRIS / transfer |
-| Sell-through | Daily | Sold out? (Y/N), leftover/waste estimate (IDR) |
-| Ingredients | Per purchase | Amount + supplier |
-| Staff wages | Monthly | Per staff member |
-| Fixed costs | Monthly | Rent, electricity, internet, app subscriptions |
-| Operational | As occurs | Gas, packaging, repairs, misc |
+| Single | 40,000 | 15 min |
+| Couple | 70,000 | 20 min |
+| Trio | 100,000 | 20 min |
+| Group (4) | 135,000 | 20 min |
 
-## 4. Dashboard Outputs (MVP)
-- Daily & monthly revenue (by payment method)
+| Add-on | Price (IDR) |
+|---|---|
+| Extra 10 min | 30,000 |
+| Extra 15 min | 50,000 |
+| Extra 20 min | 60,000 |
+| Costume — Hanbok Pria | 20,000 |
+| Costume — Hanbok Wanita | 15,000 |
+| Costume — Animal | 15,000 |
+| Extra background | 15,000 |
+| Extra person | 25,000 |
+| Print | 8,000 |
+
+## 4. Data Inputs (per order, entered by operator)
+Date, time, package type, add-ons selected (multi), total paid (IDR,
+cross-checked against pricing table), payment method.
+Monthly: salary, rent, electricity, internet, app subscriptions,
+photo paper, printer ink/ribbon, battery, operational misc, occasional
+asset purchases (flagged separately from the target calculation).
+
+## 5. Dashboard Outputs (MVP)
+- Daily & monthly revenue, split: base package revenue vs. add-on revenue
+- **Target tracker:** progress toward IDR 4,000,000 net income this
+  month — gap remaining, days left, required daily average to close it
 - Cost breakdown by category
-- Profit margin (gross & net), break-even point
-- Sell-through tracker: sold-out days vs leftover/waste trend
-- **UMKM tax position:** YTD gross revenue vs IDR 500M exemption threshold,
-  estimated 0.5% final tax if threshold is passed
-- Auto-generated monthly report (PDF)
+- Package popularity ranking (which sells most, which is neglected)
+- **Add-on attach rate by package**, trended — this is the lever
 
-## 5. AI Layer (owner/manager only — Claude API)
-- Anomaly & warning flags: cost spikes, revenue dips, cash vs QRIS ratio
-  shifts, waste increasing, "nonsense" entries (e.g. negative sales,
-  duplicate expenses, unusually round numbers)
-- Plain-language monthly summary (Bahasa Indonesia)
-- Q&A over the data ("berapa margin bulan lalu?")
+## 6. AI Layer (Week 4)
+- Add-on attach-rate trend alert: flags which specific add-on dropped,
+  by how much, over what window — feeds the operator advertising nudge
+- Slow-day / slow-week detection vs. recent baseline
+- Monthly plain-language summary in Bahasa Indonesia: progress vs.
+  target + the single highest-leverage recommendation
 
-## 6. Phase 2 (explicitly out of MVP scope)
-- Asset register & depreciation schedule
-- Balance sheet
-- Formal annual tax report generation
-- Recommendation: open a dedicated business bank account
+## 7. Phase 2 (out of MVP scope)
+- Reliable WhatsApp Business API → Sheets/dashboard automation (n8n,
+  Weeks 5-6 skill — genuine upgrade path once built)
+- Asset depreciation tracking for camera/printer/equipment
 
-## 7. Success Criteria
-1. Manager enters a full day's data in under 5 minutes
-2. Owner sees yesterday's profit from anywhere, any time
-3. AI flags at least: cost anomalies, waste trends, suspicious entries
-4. Sell-through data enables production planning toward the real goal:
-   customers fed, stock sold out daily
-5. Becomes portfolio case study #1 with measurable before/after
+## 8. Success Criteria
+1. Operator logs an order in under 60 seconds using dropdowns, not
+   free-typing prices
+2. Owner sees real-time progress toward the 4,000,000 target from
+   anywhere
+3. AI identifies the single fastest lever to close any monthly gap
+4. Dashboard replaces the Google Sheet as the operational source of truth
